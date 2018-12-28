@@ -341,7 +341,7 @@ impl Client {
             format!("Bot {}", token)
         };
 
-        let http = Http::new(reqwest::Client::builder().build()?, token.to_string());
+        let http = Http::new(reqwest::Client::builder().build()?, &token);
 
         let name = "serenity client".to_owned();
         let threadpool = ThreadPool::with_name(name, 5);
@@ -443,7 +443,7 @@ impl Client {
             format!("Bot {}", token)
         };
 
-        let http = Http::new(reqwest::Client::builder().build()?, token);
+        let http = Http::new(reqwest::Client::builder().build()?, &token);
 
         let name = "serenity client".to_owned();
         let threadpool = ThreadPool::with_name(name, 5);
@@ -525,8 +525,8 @@ impl Client {
     /// let mut client = Client::new(&env::var("DISCORD_TOKEN")?, Handler)?;
     /// client.with_framework(StandardFramework::new()
     ///     .configure(|c| c.prefix("~"))
-    ///     .on("ping", |_, msg, _| {
-    ///         msg.channel_id.say("Pong!")?;
+    ///     .on("ping", |context, msg, _| {
+    ///         msg.channel_id.say(&context.http, "Pong!")?;
     ///
     ///         Ok(())
     ///      }));
