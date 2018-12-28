@@ -153,7 +153,6 @@ impl ShardManager {
             runners: Arc::clone(&runners),
             rx: shard_queue_rx,
             threadpool: opt.threadpool,
-            token: Arc::clone(opt.token),
             #[cfg(feature = "voice")]
             voice_manager: Arc::clone(opt.voice_manager),
             ws_url: Arc::clone(opt.ws_url),
@@ -365,7 +364,6 @@ pub struct ShardManagerOptions<'a, H: EventHandler + Send + Sync + 'static> {
     pub shard_init: u64,
     pub shard_total: u64,
     pub threadpool: ThreadPool,
-    pub token: &'a Arc<Mutex<String>>,
     #[cfg(feature = "voice")]
     pub voice_manager: &'a Arc<Mutex<ClientVoiceManager>>,
     pub ws_url: &'a Arc<Mutex<String>>,

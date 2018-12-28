@@ -43,7 +43,6 @@ pub use crate::cache::Cache;
 #[cfg(feature = "cache")]
 use parking_lot::RwLock;
 
-use crate::http;
 use crate::internal::prelude::*;
 use parking_lot::Mutex;
 use self::bridge::gateway::{ShardManager, ShardManagerMonitor, ShardManagerOptions};
@@ -285,8 +284,6 @@ pub struct Client {
     /// Defaults to 5 threads, which should suffice small bots. Consider
     /// increasing this number as your bot grows.
     pub threadpool: ThreadPool,
-    /// The token in use by the client.
-    pub token: Arc<Mutex<String>>,
     /// The voice manager for the client.
     ///
     /// This is an ergonomic structure for interfacing over shards' voice
@@ -344,9 +341,7 @@ impl Client {
             format!("Bot {}", token)
         };
 
-        let http = Http::new(reqwest::Client::builder().build()?);
-        http::set_token(&token);
-        let locked = Arc::new(Mutex::new(token));
+        let http = Http::new(reqwest::Client::builder().build()?, token.to_string());
 
         let name = "serenity client".to_owned();
         let threadpool = ThreadPool::with_name(name, 5);
@@ -382,7 +377,6 @@ impl Client {
                 shard_init: 0,
                 shard_total: 0,
                 threadpool: threadpool.clone(),
-                token: &locked,
                 #[cfg(feature = "voice")]
                 voice_manager: &voice_manager,
                 ws_url: &url,
@@ -391,7 +385,6 @@ impl Client {
         };
 
         Ok(Client {
-            token: locked,
             ws_uri: url,
             #[cfg(feature = "framework")]
             framework,
@@ -450,9 +443,7 @@ impl Client {
             format!("Bot {}", token)
         };
 
-        let http = Http::new(reqwest::Client::builder().build()?);
-        http::set_token(&token);
-        let locked = Arc::new(Mutex::new(token));
+        let http = Http::new(reqwest::Client::builder().build()?, token);
 
         let name = "serenity client".to_owned();
         let threadpool = ThreadPool::with_name(name, 5);
@@ -486,7 +477,6 @@ impl Client {
                 shard_init: 0,
                 shard_total: 0,
                 threadpool: threadpool.clone(),
-                token: &locked,
                 #[cfg(feature = "voice")]
                 voice_manager: &voice_manager,
                 ws_url: &url,
@@ -495,7 +485,6 @@ impl Client {
         };
 
         Ok(Client {
-            token: locked,
             ws_uri: url,
             #[cfg(feature = "framework")]
             framework,
