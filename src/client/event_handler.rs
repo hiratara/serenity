@@ -255,7 +255,8 @@ pub trait EventHandler {
     /// Provides the presence's new data.
     fn presence_update(&self, _ctx: Context, _new_data: PresenceUpdateEvent) {}
 
-    /// Dispatched upon startup.
+    /// Dispatched when a shard connects. This event may be fired multiple
+    /// times.
     ///
     /// Provides data about the bot and the guilds it's in.
     fn ready(&self, _ctx: Context, _data_about_bot: Ready) {}
