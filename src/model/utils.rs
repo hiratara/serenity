@@ -315,7 +315,7 @@ pub fn user_has_perms(cache: impl AsRef<CacheRwLock>, channel_id: ChannelId, mut
 
     let perms = guild
         .read()
-        .permissions_in(channel_id, current_user.id);
+        .user_permissions_in(channel_id, current_user.id);
 
     permissions.remove(perms);
 

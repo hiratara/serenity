@@ -144,7 +144,7 @@ impl<'msg, 'groups, 'config, 'ctx> CommandParser<'msg, 'groups, 'config, 'ctx> {
 
                 let guild = guild.read();
 
-                let perms = guild.permissions_in(self.msg.channel_id, self.msg.author.id);
+                let perms = guild.user_permissions_in(self.msg.channel_id, self.msg.author.id);
 
                 if !perms.contains(*options.required_permissions()) &&
                     !(options.owner_privilege() &&

@@ -599,7 +599,7 @@ impl StandardFramework {
 impl Framework for StandardFramework {
     fn dispatch(&mut self, mut ctx: Context, msg: Message, threadpool: &ThreadPool) {
         if let Some(error) = self.should_fail_common(&msg) {
-		
+
             if let Some(dispatch) = &self.dispatch {
                 dispatch(&mut ctx, &msg, error);
             }
@@ -830,7 +830,7 @@ pub(crate) fn has_correct_permissions(
     if options.required_permissions().is_empty() {
         true
     } else if let Some(guild) = message.guild(&cache) {
-        let perms = guild.with(|g| g.permissions_in(message.channel_id, message.author.id));
+        let perms = guild.with(|g| g.user_permissions_in(message.channel_id, message.author.id));
 
         perms.contains(*options.required_permissions())
     } else {
